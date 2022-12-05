@@ -3,9 +3,11 @@
 #include <queue>
 #include <fstream>
 using namespace std;
+ifstream my_file;
+ofstream output;
 
 class BST; // declare BST
-class TreeNode{ // make a treenode that is 
+class TreeNode{ // make a treenode
     private:
         TreeNode *leftchild;
         TreeNode *rightchild;
@@ -19,11 +21,10 @@ class TreeNode{ // make a treenode that is
 };
 
 class BST{ // make a binary search tree
-    private:
+    public:
         TreeNode *root; // the root of the tree
         TreeNode* Leftmost(TreeNode *current);
         TreeNode* Successor(TreeNode *current);
-    public:
         BST():root(0){}; // init a BST with root = 0
         TreeNode* Search(int key); // search function for the tree
         void Insert(int value); // insert value into BST
@@ -74,6 +75,10 @@ TreeNode* BST::Successor(TreeNode *current){ // find the successor of current no
 }
 
 void BST::Insert(int value){ // inserts node into BST（Done)
+    if(Search(value) != NULL){
+        output << "Error! Number " << value << " exists." << endl;
+        return;
+    }
     TreeNode* fast = 0;
     TreeNode* slow = 0;
     TreeNode* insertNode = new TreeNode(value);
@@ -95,6 +100,7 @@ void BST::Insert(int value){ // inserts node into BST（Done)
     }else{
         slow->rightchild = insertNode;
     }
+    output << "Number " << value << " is inserted." << endl;
 }
 
 void BST::Delete(int value){ // Delete a node in BST (Done)
@@ -102,7 +108,7 @@ void BST::Delete(int value){ // Delete a node in BST (Done)
     TreeNode *DelChild = 0; // the child of the deleted node 
     TreeNode *DelNode = Search(value);
     if(DelNode == NULL){
-        cout << "Number " << value << " is not exist." << endl;
+        output << "Number " << value << " is not exist." << endl;
         return;
     }
 
@@ -133,11 +139,12 @@ void BST::Delete(int value){ // Delete a node in BST (Done)
     }
     delete Del;
     Del = 0;
+    output << "Number " << value << " is deleted." << endl;
 }
 
 void BST::PrefixPrint(TreeNode *current){ // preorder print
     while(current != NULL){
-        cout <<  " " << current -> value;
+        output <<  " " << current -> value;
         PrefixPrint(current -> leftchild); 
         PrefixPrint(current -> rightchild);
     }
@@ -146,7 +153,7 @@ void BST::PrefixPrint(TreeNode *current){ // preorder print
 void BST::InfixPrint(TreeNode *current){ // inorder print
     while(current != NULL){
         InfixPrint(current -> leftchild);
-        cout << " " << current -> value;
+        output << " " << current -> value;
         InfixPrint(current -> rightchild);
     }
 }
@@ -155,7 +162,7 @@ void BST::PostPrint(TreeNode *current){ // postorder print
     while(current != NULL){
         PostPrint(current -> leftchild);
         PostPrint(current -> rightchild);
-        cout << " " << current -> value;
+        output << " " << current -> value;
     }
 }
 
@@ -165,7 +172,7 @@ void BST::LevelPrint(){ // levelorder print
     while (!level.empty()){
         TreeNode *current = level.front();
         level.pop();
-        cout << current -> value << " ";
+        output << current -> value << " ";
         if(current -> leftchild != NULL) level.push(current -> leftchild);
         if(current -> rightchild != NULL)level.push(current -> rightchild);
     }
@@ -175,38 +182,74 @@ int main() {
     string filename;
     cout << "Input file name: ";
     cin >> filename;
-    fstream my_file;
-	my_file.open(filename.c_str, out);
-	if (!my_file) {
-		cout << "File not created!";
+	my_file.open(filename.c_str());
+    output.open("output.txt");
+	if (!my_file.is_open() || !output.is_open()) {
+        return 1;
 	}
-
-
-    string option = " ";
+    output << "File name: " << filename << endl;
+    BST bst;
+    string option = "";
     while(option != "-1"){
-        cout << "(I)nsert a number.\n(D)elete a number.\n(S)earch a number.\n(P)rint 4 kinds of orders.\n(E)xit\n";
-        cin >> option;
+        output << "(I)nsert a number.\n(D)elete a number.\n(S)earch a number.\n(P)rint 4 kinds of orders.\n(E)xit\n";
+        my_file >> option;
         // insert 
         if(option == "i" || option == "I"){
-            cout << "insert" << endl;
+            int number;
+            output << "Insert: " << endl;
+            my_file >> number;
+            while(number != -1){
+                bst.Insert(number);
+                my_file >> number;
+                cout << "hello" << endl;
+            }
         }
         // delete
         if(option == "d" || option == "D"){
-            cout << "delete" << endl;
+            int number;
+            output << "Delete: " << endl;
+            my_file >> number;
+            while(number != -1){
+                bst.Delete(number);
+                my_file >> number;
+            }
         }
         // search
         if(option == "s" || option == "S"){
-            cout << "search" << endl;
+            int number;
+            output << "Search: " << endl;
+            my_file >> number;
+            while (number != -1){
+                if(bst.Search(number) != NULL){
+                    output << "Bingo! " << number << " is found." << endl;
+                }else{
+                    output << "Sorry! " << number << " is not found." << endl;
+                }
+                my_file >> number;
+            }
+            
         }
         // print
         if(option == "p" || option == "P"){
-            cout << "print" << endl;
+            output << "Print: " << endl;
+            output << "The tree in prefix order:";
+            bst.PrefixPrint(bst.root);
+            output << endl;
+            output << "The tree in infix:";
+            bst.InfixPrint(bst.root);
+            output << endl;
+            output << "The tree in post order:";
+            bst.PostPrint(bst.root);
+            output << endl;
+            output << "The tree in level order:";
+            bst.LevelPrint();
+            output << endl;
         }
         // exit
         if(option == "-1"){
-            cout << "exit" << endl;
+            output << "Exit" << endl;
         }
     }
-    cout << "Exited" << endl;
+    output << "Exited" << endl;
     return 0;
 }
