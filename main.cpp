@@ -89,7 +89,7 @@ void BST::Insert(int value){ // inserts node into BST（Done)
         if(insertNode->value < fast->value){
             fast = fast->leftchild;
         }else{
-            slow = slow->rightchild;
+            fast = fast->rightchild;
         }
     }
     insertNode->parent = slow;
@@ -104,20 +104,21 @@ void BST::Insert(int value){ // inserts node into BST（Done)
 }
 
 void BST::Delete(int value){ // Delete a node in BST (Done)
-    TreeNode *Del = 0; // the position of the node that will be deleted
-    TreeNode *DelChild = 0; // the child of the deleted node 
     TreeNode *DelNode = Search(value);
     if(DelNode == NULL){
         output << "Number " << value << " is not exist." << endl;
         return;
     }
+    TreeNode *Del = 0; // the position of the node that will be deleted
+    TreeNode *DelChild = 0; // the child of the deleted node 
 
     if(DelNode -> leftchild == NULL || DelNode -> rightchild == NULL){
         Del = DelNode; // if the node deleted doesn't have left or right child, it deletes the position
     }else{
         Del = Successor(DelNode); // else it deletes the successor's memory
     }
-    if(Del -> leftchild == NULL){ // change the pointer of the Deleted child's parent 
+
+    if(Del -> leftchild != NULL){ // change the pointer of the Deleted child's parent 
         DelChild = Del -> leftchild; 
     }else{
         DelChild = Del -> rightchild;
@@ -126,6 +127,7 @@ void BST::Delete(int value){ // Delete a node in BST (Done)
     if(DelChild != NULL){
         DelChild -> parent = Del -> parent;
     }
+    
     if(Del -> parent == NULL){ // change the pointer of the Deleted pointer to its child 
         this->root = DelChild;
     }else if(Del == Del -> parent -> leftchild){
@@ -143,15 +145,15 @@ void BST::Delete(int value){ // Delete a node in BST (Done)
 }
 
 void BST::PrefixPrint(TreeNode *current){ // preorder print
-    while(current != NULL){
+    if(current){
         output <<  " " << current -> value;
-        PrefixPrint(current -> leftchild); 
+        PrefixPrint(current -> leftchild);
         PrefixPrint(current -> rightchild);
     }
 }
 
 void BST::InfixPrint(TreeNode *current){ // inorder print
-    while(current != NULL){
+    if(current){
         InfixPrint(current -> leftchild);
         output << " " << current -> value;
         InfixPrint(current -> rightchild);
@@ -159,7 +161,7 @@ void BST::InfixPrint(TreeNode *current){ // inorder print
 }
 
 void BST::PostPrint(TreeNode *current){ // postorder print 
-    while(current != NULL){
+    if(current){
         PostPrint(current -> leftchild);
         PostPrint(current -> rightchild);
         output << " " << current -> value;
@@ -195,14 +197,13 @@ int main() {
         my_file >> option;
         // insert 
         if(option == "i" || option == "I"){
-            int number;
+            int number = 0;
             output << "Insert: " << endl;
-            my_file >> number;
-            while(number != -1){
-                bst.Insert(number);
+            do{
                 my_file >> number;
-                cout << "hello" << endl;
-            }
+                if(number != -1) bst.Insert(number);
+            }while(number != -1);
+            output << endl;
         }
         // delete
         if(option == "d" || option == "D"){
@@ -213,6 +214,7 @@ int main() {
                 bst.Delete(number);
                 my_file >> number;
             }
+            output << endl;
         }
         // search
         if(option == "s" || option == "S"){
@@ -227,7 +229,8 @@ int main() {
                 }
                 my_file >> number;
             }
-            
+            output << endl;
+
         }
         // print
         if(option == "p" || option == "P"){
@@ -244,10 +247,12 @@ int main() {
             output << "The tree in level order:";
             bst.LevelPrint();
             output << endl;
+            output << endl;
         }
         // exit
-        if(option == "-1"){
+        if(option == "e" || option == "E"){
             output << "Exit" << endl;
+            break;
         }
     }
     output << "Exited" << endl;
