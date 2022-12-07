@@ -76,6 +76,7 @@ TreeNode* BST::Successor(TreeNode *current){ // find the successor of current no
 void BST::Insert(int value){ // inserts node into BST（Done)
     if(Search(value) != NULL){
         output << "Error! Number " << value << " exists." << endl;
+        cout << "Error! Number " << value << " exists." << endl;
         return;
     }
     TreeNode* fast = 0;
@@ -100,6 +101,7 @@ void BST::Insert(int value){ // inserts node into BST（Done)
         slow->rightchild = insertNode;
     }
     output << "Number " << value << " is inserted." << endl;
+    cout << "Number " << value << " is inserted." << endl;
 }
 
 void BST::Delete(int value){ // Delete a node in BST (Done)
@@ -141,11 +143,13 @@ void BST::Delete(int value){ // Delete a node in BST (Done)
     delete Del;
     Del = 0;
     output << "Number " << value << " is deleted." << endl;
+    cout << "Number " << value << " is deleted." << endl;
 }
 
 void BST::PrefixPrint(TreeNode *current){ // preorder print
     if(current){
         output <<  " " << current -> value;
+        cout <<  " " << current -> value;
         PrefixPrint(current -> leftchild);
         PrefixPrint(current -> rightchild);
     }
@@ -155,6 +159,7 @@ void BST::InfixPrint(TreeNode *current){ // inorder print
     if(current){
         InfixPrint(current -> leftchild);
         output << " " << current -> value;
+        cout << " " << current -> value;
         InfixPrint(current -> rightchild);
     }
 }
@@ -164,6 +169,7 @@ void BST::PostPrint(TreeNode *current){ // postorder print
         PostPrint(current -> leftchild);
         PostPrint(current -> rightchild);
         output << " " << current -> value;
+        cout << " " << current -> value;
     }
 }
 
@@ -174,6 +180,7 @@ void BST::LevelPrint(){ // levelorder print
         TreeNode *current = level.front();
         level.pop();
         output << current -> value << " ";
+        cout << current -> value << " ";
         if(current -> leftchild != NULL) level.push(current -> leftchild);
         if(current -> rightchild != NULL)level.push(current -> rightchild);
     }
@@ -193,21 +200,25 @@ int main() {
     string option = "";
     while(option != "-1"){
         output << "(I)nsert a number.\n(D)elete a number.\n(S)earch a number.\n(P)rint 4 kinds of orders.\n(E)xit\n";
+        cout << "(I)nsert a number.\n(D)elete a number.\n(S)earch a number.\n(P)rint 4 kinds of orders.\n(E)xit\n";
         my_file >> option;
         // insert 
         if(option == "i" || option == "I"){
             int number = 0;
             output << "Insert: " << endl;
+            cout << "Insert: " << endl;
             do{
                 my_file >> number;
                 if(number != -1) bst.Insert(number);
             }while(number != -1);
             output << endl;
+            cout << endl;
         }
         // delete
         if(option == "d" || option == "D"){
             int number;
             output << "Delete: " << endl;
+            cout << "Delete: " << endl;
             my_file >> number;
             while(number != -1){
                 bst.Delete(number);
@@ -219,41 +230,56 @@ int main() {
         if(option == "s" || option == "S"){
             int number;
             output << "Search: " << endl;
+            cout << "Search: " << endl;
             my_file >> number;
             while (number != -1){
                 if(bst.Search(number) != NULL){
                     output << "Bingo! " << number << " is found." << endl;
+                    cout << "Bingo! " << number << " is found." << endl;
                 }else{
                     output << "Sorry! " << number << " is not found." << endl;
+                    cout << "Sorry! " << number << " is not found." << endl;
                 }
                 my_file >> number;
             }
             output << endl;
-
+            cout << endl;
         }
         // print
         if(option == "p" || option == "P"){
             output << "Print: " << endl;
+            cout << "Print: " << endl;
             output << "The tree in prefix order:";
+            cout << "The tree in prefix order:";
             bst.PrefixPrint(bst.root);
             output << endl;
+            cout << endl;
             output << "The tree in infix:";
+            cout << "The tree in infix:";
             bst.InfixPrint(bst.root);
             output << endl;
+            cout << endl;
             output << "The tree in post order:";
+            cout << "The tree in post order:";
             bst.PostPrint(bst.root);
             output << endl;
+            cout << endl;
             output << "The tree in level order:";
+            cout << "The tree in level order:";
             bst.LevelPrint();
+            cout << endl;
+            cout << endl;
             output << endl;
             output << endl;
         }
         // exit
         if(option == "e" || option == "E"){
             output << "Exit" << endl;
+            cout << "Exit" << endl;
             break;
         }
     }
+    cout << "Exited" << endl;
     output << "Exited" << endl;
     return 0;
 }
