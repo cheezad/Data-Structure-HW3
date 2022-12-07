@@ -195,12 +195,13 @@ int main() {
 	if (!my_file.is_open() || !output.is_open()) {
         return 1;
 	}
-    output << "File name: " << filename << endl;
+    output << "File name: " << filename << endl << endl;
+    cout << endl;
     BST bst;
     string option = "";
     while(option != "-1"){
-        output << "(I)nsert a number.\n(D)elete a number.\n(S)earch a number.\n(P)rint 4 kinds of orders.\n(E)xit\n";
-        cout << "(I)nsert a number.\n(D)elete a number.\n(S)earch a number.\n(P)rint 4 kinds of orders.\n(E)xit\n";
+        output << "(I)nsert a number.\n(D)elete a number.\n(S)earch a number.\n(P)rint 4 kinds of orders.\n(E)xit\n\n";
+        cout << "(I)nsert a number.\n(D)elete a number.\n(S)earch a number.\n(P)rint 4 kinds of orders.\n(E)xit\n\n";
         my_file >> option;
         // insert 
         if(option == "i" || option == "I"){
@@ -279,7 +280,5 @@ int main() {
             break;
         }
     }
-    cout << "Exited" << endl;
-    output << "Exited" << endl;
     return 0;
 }
