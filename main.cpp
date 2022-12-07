@@ -16,7 +16,6 @@ class TreeNode{ // make a treenode
     public:
         TreeNode(): leftchild(0), rightchild(0), parent(0), value(0){}; // init a treenode with current value is 0
         TreeNode(int a): leftchild(0), rightchild(0), value(a){}; // init a treenode with a as the current value
-        int Getvalue(){return value;} // gets the value since we had it in private 
         friend class BST; // make it avaliable to access the private class from BST
 };
 
